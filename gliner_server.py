@@ -25,9 +25,12 @@ class GlinerDeployment:
         text = data.get("text", "")
         if not text:
             return {"error": "No text provided"}
-
+        text = """
+            Libretto by Marius Petipa, based on the 1822 novella ``Trilby, ou Le Lutin d'Argail`` by Charles Nodier, first presented by the Ballet of the Moscow Imperial Bolshoi Theatre on January 25/February 6 (Julian/Gregorian calendar dates), 1870, in Moscow with Polina Karpakova as Trilby and Ludiia Geiten as Miranda and restaged by Petipa for the Imperial Ballet at the Imperial Bolshoi Kamenny Theatre on January 17–29, 1871 in St. Petersburg with Adèle Grantzow as Trilby and Lev Ivanov as Count Leopold.
+        """
+        labels = ["person", "book", "location", "date", "actor", "character"]
         # Call the gliner method
-        summary = self.gliner_predict(text)
+        summary = self.gliner_predict(text, labels)
         return {"gliner output": summary}
 
 deployment = GlinerDeployment.bind()
