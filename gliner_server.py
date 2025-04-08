@@ -11,8 +11,10 @@ from fastapi import FastAPI
 class GlinerDeployment:
     # FastAPI will automatically parse the HTTP request for us.
     def __init__(self):
-        self.model = GLiNER.from_pretrained("urchade/gliner_medium").to("cuda:0")
+        self.model = GLiNER.from_pretrained("urchade/gliner_medium")
         self.model.eval()
+        if torch.cuda.is_available():
+            self.model.to("cuda:0")
         self.sample_text = """
             Libretto by Marius Petipa, based on the 1822 novella ``Trilby, ou Le Lutin d'Argail`` by Charles Nodier, first presented by the Ballet of the Moscow Imperial Bolshoi Theatre on January 25/February 6 (Julian/Gregorian calendar dates), 1870, in Moscow with Polina Karpakova as Trilby and Ludiia Geiten as Miranda and restaged by Petipa for the Imperial Ballet at the Imperial Bolshoi Kamenny Theatre on January 17–29, 1871 in St. Petersburg with Adèle Grantzow as Trilby and Lev Ivanov as Count Leopold.
         """
