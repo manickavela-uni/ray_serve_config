@@ -7,7 +7,7 @@ from gliner import GLiNER
 import torch
 from fastapi import FastAPI
 
-@serve.deployment(num_replicas=2, ray_actor_options={"num_cpus": 0.5, "num_gpus": 1})
+@serve.deployment(num_replicas=1, ray_actor_options={"num_cpus": 0.5, "num_gpus": 1})
 class GlinerDeployment:
     # FastAPI will automatically parse the HTTP request for us.
     def __init__(self):
