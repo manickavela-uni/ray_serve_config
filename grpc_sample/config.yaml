@@ -1,0 +1,16 @@
+grpc_options:
+  port: 9000
+  grpc_servicer_functions:
+    - user_defined_protos_pb2_grpc.add_UserDefinedServiceServicer_to_server
+    - user_defined_protos_pb2_grpc.add_ImageClassificationServiceServicer_to_server
+
+applications:
+  - name: app1
+    route_prefix: /app1
+    import_path: grpc_server:g
+    runtime_env: {}
+
+  - name: app2
+    route_prefix: /app2
+    import_path: grpc_server2:g2
+    runtime_env: {}
