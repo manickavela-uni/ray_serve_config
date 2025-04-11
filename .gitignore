@@ -1,0 +1,29 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# VSCode settings (includes Pylance config)
+.vscode/
+
+# Env
+.env
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# Logs and outputs
+*.log
+*.out
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Mac/Linux/Windows OS files
+.DS_Store
+Thumbs.db
+
