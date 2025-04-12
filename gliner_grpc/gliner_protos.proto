@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+message TextsLabels {
+  repeated string texts = 1;
+  repeated string labels = 2;
+  float threshold = 3;
+}
+
+message Entity {
+  int32 start = 1;
+  int32 end = 2;
+  string text = 3;
+  string label = 4;
+  float score = 5;
+}
+
+message EntityList {
+  repeated Entity content = 1;
+}
+
+message EntityLists {
+  repeated EntityList content = 1;
+}
+
+service Gliner {
+  rpc infer (TextsLabels) returns (EntityLists) {}
+}

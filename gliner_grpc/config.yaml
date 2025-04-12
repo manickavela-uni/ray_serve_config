@@ -1,0 +1,11 @@
+grpc_options:
+  port: 9000
+  grpc_servicer_functions:
+    - gliner_protos_pb2_grpc.add_GlinerServicer_to_server
+
+applications:
+  - name: gliner
+    route_prefix: /gliner
+    import_path: gliner_server:g
+    runtime_env: {}
+
