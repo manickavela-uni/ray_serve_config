@@ -4,15 +4,16 @@ from gliner_protos_pb2 import (
     EntityList,
     EntityLists
 )
-
-import ray
 import time
 from ray import serve
 from gliner import GLiNER
 from typing import List
 import torch
 
-@serve.deployment(num_replicas=1, ray_actor_options={"num_cpus": 1, "num_gpus" :1})
+@serve.deployment(
+    num_replicas=6,
+    ray_actor_options={"num_cpus": 0.5, "num_gpus" :0.1},
+    max_ongoing_requests=100)
 class GlinerDeployment:
     def __init__(self):
         self.model = GLiNER.from_pretrained("urchade/gliner_medium")
