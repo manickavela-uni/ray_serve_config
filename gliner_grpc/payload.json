@@ -1,0 +1,23 @@
+{
+    "texts": [
+      "agent: hi thanks for calling voya, customer: hi, agent: this is john how can i help you, customer: hi john this is maria, agent: hi maria, customer: i am looking for my claim received date, agent: sure your claim received date is twenty four january twenty twenty four"
+    ],
+    "labels": [
+      "name of the agent", "customer phone number", "account top up amount", "mobile number",
+      "customer preferred callback date", "customer best call back number", "customer suitable time to connect",
+      "connect back time", "best call back date", "customer preferred call back date", "sim card number",
+      "customer payment zip code", "wireless phone number", "customer available date", "number in the sim card",
+      "customer available time", "agent reference name", "agent name", "connect back date", "alternate phone number",
+      "customers calling number", "call back time", "additional number to contact", "customer alternate number",
+      "record name", "agent identification name", "address zip code", "customer validation name",
+      "alternate best callback number", "customer best alternate call back number", "customer preferred call back time",
+      "insurance number", "customer number", "zip code", "customer zip code", "customer name", "best call back time",
+      "call back date", "assurance number", "new sim card number", "amount to add", "name of the customer",
+      "registered name", "customer suitable callback time", "first name", "current phone number",
+      "customer suitable date to connect", "alternate contact number", "alternate call back number",
+      "top up amount", "payment zip code", "name of the account holder", "account holder name", "first and last name",
+      "name of the customer in record", "new sim number", "customer identification name"
+    ],
+    "threshold": 0.1
+  }
+  

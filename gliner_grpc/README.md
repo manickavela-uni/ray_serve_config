@@ -56,7 +56,13 @@ ghz --insecure \
 Script based benchmarking with various load test configuration
 
 ```sh
-source gliner_load_benchmarks.sh
+chmod +x run_grpc_benchmark.sh
+
+# Run a specific test:
+./run_grpc_benchmark.sh load
+./run_grpc_benchmark.sh soak
+./run_grpc_benchmark.sh spike
+./run_grpc_benchmark.sh stress
 ```
 
 3. threadpool
