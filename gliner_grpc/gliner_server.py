@@ -11,8 +11,8 @@ from typing import List
 import torch
 
 @serve.deployment(
-    num_replicas=6,
-    ray_actor_options={"num_cpus": 0.5, "num_gpus" :0.1},
+    num_replicas=2,
+    ray_actor_options={"num_cpus": 0.2, "num_gpus" :0.1},
     max_ongoing_requests=100)
 class GlinerDeployment:
     def __init__(self):
