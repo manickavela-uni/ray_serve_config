@@ -4,8 +4,8 @@ http_options:
   port: 8000      # HTTP port for serving
 
 applications:
-  - name: unifit_inference_worker
+  - name: inference_worker
     route_prefix: /
-    import_path: unifit_inference_worker:unifit_inference
+    import_path: inference_worker:unifit_inference
     runtime_env: {}
 

@@ -29,24 +29,34 @@ class Turn(BaseModel):
     speaker: Speaker
     text: str
 
+MODEL_DIR = "/mnt/efs/manickavela/unifit/unifit_models"
+
 @serve.deployment(
-    num_replicas=1,
+    num_replicas=10,
     ray_actor_options={"num_cpus": 0.2, "num_gpus" :0.1},
     max_ongoing_requests=100)
 class UnifitInference:
     def __init__(self):
-        print([os.listdir('/mnt/efs/manickavela/nlp/')])
-        model_path = "/mnt/efs/manickavela/nlp/mukesh_model"
+        self.model_path = "/mnt/efs/manickavela/unifit/unifit_models"
+    
+    @serve.multiplexed(max_num_models_per_replica=3)
+    async def get_model_runtime(self, model_id) -> UniFitRuntime:
+        """ Load the model """
+        print(f"Loading model {model_id} in path {self.model_path}/{model_id}")
+        if not os.path.exists(self.model_path+"/"+model_id):
+            raise FileNotFoundError(f"Model path {self.model_path}/{model_id} does not exist")
         try:
             print("Reading UnifitRuntime")
-            self.runtime = UniFitRuntime.initialize_runtime(
-                model_path)
+            runtime = UniFitRuntime.initialize_runtime(
+                self.model_path+"/"+model_id)
             print("UnifitRuntime initialized")
         except Exception as e:
             print(f"Error initializing UniFitRuntime: {e}")
             raise e
-                # access FastAPI app object from Serve
+        return runtime
+
     async def __call__(self, request):
+        model_id = serve.get_multiplexed_model_id()
         data = await request.json()
         if isinstance(data, dict):
             text = data.get("text", "")
@@ -57,21 +67,25 @@ class UnifitInference:
             return {"error": "No text provided"}
         if not speaker:
             return {"error": "No speaker provided"}
+
         speaker = Speaker.from_string(speaker)
-        self.infer_runtime([Turn(speaker=speaker, text=text)])
-        return {"message": "Inference completed"}
-        
-    def infer_runtime(self, turns: List[Turn]) -> List[str]:
-        """ Infer runtime on turns """
-        setting: Settings = self.runtime.SETTING
+        turns = [Turn(speaker=speaker, text=text)]
+        runtime: UniFitRuntime = await self.get_model_runtime(model_id)
+        # self.infer_runtime([Turn(speaker=speaker, text=text)])
+        setting: Settings = runtime.SETTING
         if setting == Settings.SETFIT_WITH_KEYWORDS_BASED_DATA_EXTENSION_AND_SELF_LEARNING:
             turns_speaker_and_text_tuples_list: List[Tuple[str, str]] = [
                 (turn.speaker.value, turn.text) for turn in turns
             ]
-            outputs: List[RuntimeOutput] = self.runtime.infer(turns_speaker_and_text_tuples_list)
+            outputs: List[RuntimeOutput] = runtime.infer(turns_speaker_and_text_tuples_list)
         else :
             raise NotImplementedError(f"Infering the runtime for setting \"{setting.value}\" is not currently supported")
-        return outputs
+
+        return {"message": "Inference completed "+outputs[0].__str__()}
+
+    # def infer_runtime(self, turns: List[Turn]) -> List[str]:
+    #     """ Infer runtime on turns """
+    #     return outputs
 
 unifit_inference = UnifitInference.bind()
 # app1 = "unifit_inference_worker"

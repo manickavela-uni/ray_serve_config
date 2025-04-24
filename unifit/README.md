@@ -78,3 +78,11 @@ curl -X POST http://localhost:8000/unifit_inference_worker/ \
      -H "Content-Type: application/json" \
      -d '{"speaker": "agent", "text": "hello good afternoon welcome to my name is how can i help you"}'
 ```
+
+
+curl -X POST http://localhost:8000/ \
+     -H "serve_multiplexed_model_id:f7a88bc2-49eb-4330-96eb-9ea5488fd2b2" \
+     -H "Content-Type: application/json" \
+     -d '{"speaker": "agent", "text": "hello good afternoon welcome to my name is how can i help you"}'
+
+     f7a88bc2-49eb-4330-96eb-9ea5488fd2b2
