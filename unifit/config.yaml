@@ -5,7 +5,7 @@ http_options:
 
 applications:
   - name: inference_worker
-    route_prefix: /
+    route_prefix: /unifit_inference
     import_path: inference_worker:unifit_inference
     runtime_env: {}
     deployments:
