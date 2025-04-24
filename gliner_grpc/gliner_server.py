@@ -11,9 +11,9 @@ from typing import List
 import torch
 
 @serve.deployment(
-    num_replicas=2,
-    ray_actor_options={"num_cpus": 0.2, "num_gpus" :0.1},
-    max_ongoing_requests=100)
+    name="static_gliner",
+    ray_actor_options={"num_cpus": 0.02, 
+                       "num_gpus" : 0.1},)
 class GlinerDeployment:
     def __init__(self):
         self.model = GLiNER.from_pretrained("urchade/gliner_medium")
@@ -49,7 +49,7 @@ class GlinerDeployment:
         entity_lists = self.model.batch_predict_entities(texts=texts, labels=labels, threshold=threshold)
         print(f"time take : {time.time() - start}")
         return self.from_entity_lists_to_pb(entity_lists=entity_lists)
-
-g = GlinerDeployment.bind()
-app1 = "gliner"
-serve.run(target=g, name=app1, route_prefix=f"/{app1}")
+# GlinerDeployment = GlinerDeployment.options()
+g  = GlinerDeployment.bind()
+# app1 = "gliner"
+# serve.run(target=g, name=app1, route_prefix=f"/{app1}")
