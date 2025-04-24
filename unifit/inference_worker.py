@@ -32,9 +32,9 @@ class Turn(BaseModel):
 MODEL_DIR = "/mnt/efs/manickavela/unifit/unifit_models"
 
 @serve.deployment(
-    num_replicas=10,
-    ray_actor_options={"num_cpus": 0.2, "num_gpus" :0.1},
-    max_ongoing_requests=100)
+    name="static_unifit",
+    ray_actor_options={"num_cpus": 0.2, 
+                       "num_gpus" :0.1})
 class UnifitInference:
     def __init__(self):
         self.model_path = "/mnt/efs/manickavela/unifit/unifit_models"
