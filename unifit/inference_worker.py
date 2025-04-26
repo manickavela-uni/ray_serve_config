@@ -81,7 +81,11 @@ class UnifitInference:
         else :
             raise NotImplementedError(f"Infering the runtime for setting \"{setting.value}\" is not currently supported")
 
-        return {"message": "Inference completed "+outputs[0].__str__()}
+        return {
+            "status" : "success",
+            "setting" : setting.value,
+            "outputs": outputs
+        }
 
     # def infer_runtime(self, turns: List[Turn]) -> List[str]:
     #     """ Infer runtime on turns """
