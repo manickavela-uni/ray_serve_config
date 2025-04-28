@@ -1,0 +1,28 @@
+# http interface is not tested
+http_options:
+  host: 0.0.0.0  # or specify a particular IP to bind the HTTP server to
+  port: 8000      # HTTP port for serving
+
+applications:
+  - name: inference_worker
+    route_prefix: /unifit_inference
+    import_path: inference_worker:unifit_inference
+    runtime_env: {}
+    deployments:
+      - name: static_unifit
+        num_replicas: 10
+        max_concurrent_queries: 100
+      - name: dynamic_unifit
+        num_replicas: 10
+        max_concurrent_queries: 100
+        autoscaling_config:
+          min_replicas: 1
+          max_replicas: 10
+          target_utilization_percentage: 80
+          scale_up_cooldown_s: 60
+          scale_down_cooldown_s: 60
+          scale_up_threshold: 0.8
+          scale_down_threshold: 0.2
+          scale_up_step: 1
+          scale_down_step: 1
+
