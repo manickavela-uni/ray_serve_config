@@ -74,7 +74,10 @@ class UnifitInference:
             turns_speaker_and_text_tuples_list: List[List[str, str]] = [
                 data['turns']
             ]
+            print(f"Request data : {data}")
             outputs: List[RuntimeOutput] = runtime.infer(turns_speaker_and_text_tuples_list)
+            print(f"Outputs : {outputs}")
+            outputs = [output.to_dict() for output in outputs]
         else :
             raise NotImplementedError(f"Infering the runtime for setting \"{setting.value}\" is not currently supported")
 
