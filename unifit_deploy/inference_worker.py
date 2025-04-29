@@ -1,5 +1,5 @@
 import time, os
-import json, 
+import json
 from ray import serve
 from typing import List, Tuple
 from dataclasses import dataclass
