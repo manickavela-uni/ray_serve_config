@@ -1,3 +1,9 @@
+
+# gliner
+*/__pycache__
+gliner_grpc/reports
+gliner_grpc/LICENSE
+
 # Byte-compiled / cache
 __pycache__/
 *.py[cod]
