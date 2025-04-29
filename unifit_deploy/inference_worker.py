@@ -1,4 +1,5 @@
 import time, os
+import json, 
 from ray import serve
 from typing import List, Tuple
 from dataclasses import dataclass
@@ -9,6 +10,7 @@ from unifit import UniFitRuntime
 from unifit.project.settings import Settings
 from unifit.project.unifit_setfit_with_keywords_based_data_extension_and_self_learning_project.unifit_setfit_with_keywords_based_data_extension_and_self_learning_runtime import UniFitSetFitWithKeywordsDataExtensionSelfLearningRuntimeOutput as RuntimeOutput
 from fastapi import FastAPI
+from starlette.responses import JSONResponse
 
 app = FastAPI()
 
@@ -38,7 +40,7 @@ MODEL_DIR = "/home/uniphore/app/resources/models/runtime-files"
 class UnifitInference:
     def __init__(self):
         self.model_path = MODEL_DIR
-    
+
     @serve.multiplexed(max_num_models_per_replica=3)
     async def get_model_runtime(self, model_id) -> UniFitRuntime:
         """ Load the model """
@@ -57,25 +59,20 @@ class UnifitInference:
 
     async def __call__(self, request):
         model_id = serve.get_multiplexed_model_id()
-        data = await request.json()
-        if isinstance(data, dict):
-            text = data.get("text", "")
-            speaker = data.get("speaker", "others")
-        else:
-            return {"error": "Invalid request format"}
-        if not text:
-            return {"error": "No text provided"}
-        if not speaker:
-            return {"error": "No speaker provided"}
+        try:
+            data = await request.json()
+        except json.JSONDecodeError:
+            data = None  # or {}
 
-        speaker = Speaker.from_string(speaker)
-        turns = [Turn(speaker=speaker, text=text)]
+        if data is None:
+            return JSONResponse({"error": "Empty or invalid JSON body"}, status_code=400)
+    
+ 
         runtime: UniFitRuntime = await self.get_model_runtime(model_id)
-        # self.infer_runtime([Turn(speaker=speaker, text=text)])
         setting: Settings = runtime.SETTING
         if setting == Settings.SETFIT_WITH_KEYWORDS_BASED_DATA_EXTENSION_AND_SELF_LEARNING:
-            turns_speaker_and_text_tuples_list: List[Tuple[str, str]] = [
-                (turn.speaker.value, turn.text) for turn in turns
+            turns_speaker_and_text_tuples_list: List[List[str, str]] = [
+                data['turns']
             ]
             outputs: List[RuntimeOutput] = runtime.infer(turns_speaker_and_text_tuples_list)
         else :
@@ -86,10 +83,6 @@ class UnifitInference:
             "setting" : setting.value,
             "outputs": outputs
         }
-
-    # def infer_runtime(self, turns: List[Turn]) -> List[str]:
-    #     """ Infer runtime on turns """
-    #     return outputs
 
 unifit_inference = UnifitInference.bind()
 # app1 = "unifit_inference_worker"
